@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infomedics CRM — Dynamics 365</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --d-blue:      #0078D4;
+  --d-blue-dk:   #005A9E;
+  --d-blue-lt:   #EFF6FC;
+  --d-navy:      #002050;
+  --d-bg:        #F3F2F1;
+  --d-surface:   #FFFFFF;
+  --d-border:    #EDEBE9;
+  --d-border-md: #C8C6C4;
+  --d-text:      #201F1E;
+  --d-sub:       #605E5C;
+  --d-muted:     #A19F9D;
+  --d-green:     #107C10;
+  --d-green-bg:  #DFF6DD;
+  --d-amber:     #7A4F01;
+  --d-amber-bg:  #FFF4CE;
+  --d-red:       #A4262C;
+  --d-red-bg:    #FDE7E9;
+  --d-orange:    #D83B01;
+  --font:        'Segoe UI', system-ui, sans-serif;
+}
+
+body { font-family: var(--font); background: var(--d-bg); color: var(--d-text);
+  font-size: 13px; overflow-x: hidden; }
+
+/* ── COMMAND BAR ── */
+.cmd-bar {
+  background: var(--d-surface);
+  border-bottom: 1px solid var(--d-border);
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+}
+.cmd-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 10px; height: 32px; border: none;
+  background: transparent; color: var(--d-blue);
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer; border-radius: 2px; white-space: nowrap;
+  transition: background 0.1s;
+}
+.cmd-btn:hover { background: var(--d-blue-lt); }
+.cmd-btn .icon { font-size: 14px; }
+.cmd-btn.primary { color: var(--d-surface); background: var(--d-blue); }
+.cmd-btn.primary:hover { background: var(--d-blue-dk); }
+.cmd-sep { width: 1px; height: 20px; background: var(--d-border); margin: 0 4px; }
+
+/* ── APP HEADER ── */
+.app-header {
+  background: var(--d-navy);
+  padding: 0 14px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-name { color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; }
+.app-module { color: rgba(255,255,255,0.6); font-size: 12px; }
+.app-sep { color: rgba(255,255,255,0.3); margin: 0 4px; }
+.ms-logo {
+  display: flex; gap: 2px; flex-shrink: 0;
+}
+.ms-logo span {
+  width: 8px; height: 8px; border-radius: 1px;
+}
+.ms-logo .r { background: #F35325; }
+.ms-logo .g { background: #81BC06; }
+.ms-logo .b { background: #05A6F0; }
+.ms-logo .y { background: #FFBA08; }
+.ms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; width: 18px; height: 18px; }
+
+/* ── RECORD HEADER ── */
+.rec-header {
+  background: var(--d-surface);
+  border-bottom: 1px solid var(--d-border);
+  padding: 10px 14px 0;
+}
+.rec-entity {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--d-muted); margin-bottom: 4px;
+}
+.rec-title { font-size: 18px; font-weight: 600; color: var(--d-text); margin-bottom: 6px; }
+.rec-meta-row {
+  display: flex; gap: 24px; padding-bottom: 8px;
+}
+.rec-meta-item { }
+.rec-meta-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--d-muted); margin-bottom: 2px; font-weight: 600;
+}
+.rec-meta-val {
+  font-size: 12px; color: var(--d-sub); font-weight: 400;
+}
+.rec-status {
+  margin-left: auto; display: flex; align-items: center; gap: 8px;
+}
+.status-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 2px; font-size: 12px; font-weight: 600;
+}
+.status-pill::before { content:''; width: 6px; height: 6px; border-radius: 50%; }
+.status-pill.active { background: var(--d-green-bg); color: var(--d-green); }
+.status-pill.active::before { background: var(--d-green); }
+.status-pill.amber  { background: var(--d-amber-bg);  color: var(--d-amber); }
+.status-pill.amber::before  { background: #FFB900; }
+.status-pill.red    { background: var(--d-red-bg);    color: var(--d-red); }
+.status-pill.red::before    { background: var(--d-red); }
+
+/* ── BUSINESS PROCESS FLOW ── */
+.bpf {
+  background: #FAF9F8;
+  border-bottom: 2px solid var(--d-border);
+  padding: 8px 14px;
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto;
+}
+.bpf-stage {
+  display: flex; align-items: center; flex-shrink: 0;
+  font-size: 11px; font-weight: 600; padding: 4px 14px 4px 10px;
+  position: relative; color: var(--d-sub);
+  cursor: pointer; transition: color 0.1s;
+}
+.bpf-stage.active { color: var(--d-blue); }
+.bpf-stage.done   { color: var(--d-green); }
+.bpf-stage .check { font-size: 10px; margin-right: 4px; }
+.bpf-arrow {
+  width: 0; height: 0; flex-shrink: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 10px solid var(--d-border);
+  margin: 0 2px;
+}
+.bpf-stage.active::after {
+  content: '';
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px; background: var(--d-blue);
+}
+.bpf-label { font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--d-blue); margin-left: auto; padding-right: 4px; flex-shrink: 0; }
+
+/* ── TABS ── */
+.tabs {
+  background: var(--d-surface);
+  border-bottom: 1px solid var(--d-border);
+  padding: 0 14px;
+  display: flex; gap: 0;
+}
+.tab-btn {
+  padding: 8px 14px; border: none; background: transparent;
+  font-family: var(--font); font-size: 13px; color: var(--d-sub);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.1s; margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--d-text); }
+.tab-btn.active { color: var(--d-blue); border-bottom-color: var(--d-blue); font-weight: 600; }
+
+/* ── FORM BODY ── */
+.form-body { padding: 12px 14px; }
+
+/* ── SECTION ── */
+.form-sec { background: var(--d-surface); border: 1px solid var(--d-border);
+  border-radius: 2px; margin-bottom: 8px; }
+.form-sec-hdr {
+  padding: 8px 14px; border-bottom: 1px solid var(--d-border);
+  font-size: 12px; font-weight: 700; color: var(--d-text);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.form-sec-hdr .chevron { font-size: 10px; color: var(--d-muted); }
+.form-sec-body { padding: 8px 0; }
+
+/* ── DYNAMICS FIELD STYLE ── */
+.d-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.d-field {
+  padding: 6px 14px; border-bottom: 1px solid transparent;
+  transition: background 0.1s;
+}
+.d-field:hover { background: #FAFAFA; }
+.d-field.full { grid-column: span 2; }
+.d-field label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--d-muted); margin-bottom: 3px; letter-spacing: 0.01em;
+}
+/* Read-only value (Dynamics default look) */
+.d-val {
+  font-size: 13px; color: var(--d-text); padding: 1px 0;
+  border-bottom: 1px solid transparent; min-height: 24px;
+}
+/* Editable field — underline only style */
+.d-field input, .d-field select, .d-field textarea {
+  width: 100%; font-family: var(--font); font-size: 13px; color: var(--d-text);
+  background: transparent; border: none; border-bottom: 1px solid var(--d-border-md);
+  padding: 2px 0; outline: none; transition: border-color 0.15s;
+}
+.d-field input:focus, .d-field select:focus, .d-field textarea:focus {
+  border-bottom-color: var(--d-blue);
+  box-shadow: 0 1px 0 0 var(--d-blue);
+}
+.d-field textarea { resize: vertical; min-height: 52px; }
+
+/* ── SLA TIMER (Dynamics style) ── */
+.sla-wrap {
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 14px;
+}
+.sla-ring-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+.sla-ring-wrap svg { width: 52px; height: 52px; transform: rotate(-90deg); }
+.sla-ring-bg  { fill: none; stroke: var(--d-border); stroke-width: 4; }
+.sla-ring-val { fill: none; stroke-width: 4; stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+.sla-center { position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; }
+.sla-pct  { font-size: 11px; font-weight: 700; }
+.sla-info { flex: 1; }
+.sla-time-big { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sla-desc { font-size: 11px; color: var(--d-sub); margin-top: 2px; }
+.sla-target { font-size: 10px; color: var(--d-muted); margin-top: 3px; }
+.sla-time-big.ok     { color: var(--d-green); }
+.sla-time-big.warn   { color: #D97706; }
+.sla-time-big.breach { color: var(--d-red); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* ── TIMELINE ── */
+.tl-item {
+  display: flex; gap: 10px; padding: 8px 14px;
+  border-bottom: 1px solid var(--d-border);
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-icon {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; margin-top: 1px;
+}
+.tl-icon.call   { background: #EFF6FC; }
+.tl-icon.email  { background: #EFF6FC; }
+.tl-icon.note   { background: #FFF4CE; }
+.tl-icon.task   { background: var(--d-green-bg); }
+.tl-body { flex: 1; }
+.tl-title { font-size: 12px; font-weight: 600; }
+.tl-sub   { font-size: 11px; color: var(--d-sub); margin-top: 1px; }
+.tl-time  { font-size: 10px; color: var(--d-muted); white-space: nowrap; }
+
+/* ── TOGGLE (Dynamics fluent style) ── */
+.fluent-toggle { display: flex; align-items: center; gap: 8px; }
+.fluent-toggle input[type=checkbox] { display: none; }
+.fluent-track {
+  width: 40px; height: 20px; border-radius: 10px;
+  background: var(--d-border-md); position: relative; cursor: pointer;
+  transition: background 0.2s; flex-shrink: 0;
+}
+.fluent-track::after {
+  content: ''; position: absolute; width: 14px; height: 14px;
+  background: #fff; border-radius: 50%; top: 3px; left: 3px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+input:checked ~ .fluent-track { background: var(--d-blue); }
+input:checked ~ .fluent-track::after { transform: translateX(20px); }
+input.danger:checked ~ .fluent-track { background: var(--d-red); }
+input.warn:checked ~ .fluent-track { background: #D97706; }
+input.success:checked ~ .fluent-track { background: var(--d-green); }
+.fluent-label { font-size: 12px; color: var(--d-sub); }
+
+/* ── FLAGS SECTION ── */
+.flags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.flag-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px; border-bottom: 1px solid var(--d-border);
+}
+.flag-item:nth-child(odd) { border-right: 1px solid var(--d-border); }
+.flag-item:nth-last-child(-n+2) { border-bottom: none; }
+.flag-text { font-size: 12px; }
+.flag-text small { display: block; font-size: 10px; color: var(--d-muted); margin-top: 1px; }
+
+/* TABS CONTENT */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- APP HEADER (Dynamics top bar) -->
+<div class="app-header">
+  <div class="ms-grid ms-logo">
+    <span class="r"></span><span class="g"></span>
+    <span class="b"></span><span class="y"></span>
+  </div>
+  <span class="app-name">Dynamics 365</span>
+  <span class="app-sep">›</span>
+  <span class="app-module">Customer Service</span>
+  <span class="app-sep">›</span>
+  <span class="app-module" style="color:rgba(255,255,255,0.85)">Cases</span>
+</div>
+
+<!-- COMMAND BAR -->
+<div class="cmd-bar">
+  <button class="cmd-btn primary"><span class="icon">💾</span> Save</button>
+  <button class="cmd-btn"><span class="icon">✖</span> Save &amp; Close</button>
+  <div class="cmd-sep"></div>
+  <button class="cmd-btn"><span class="icon">👤</span> Assign</button>
+  <button class="cmd-btn"><span class="icon">📧</span> Send Email</button>
+  <button class="cmd-btn"><span class="icon">📞</span> Add Phone Call</button>
+  <div class="cmd-sep"></div>
+  <button class="cmd-btn"><span class="icon">🔔</span> Follow</button>
+  <button class="cmd-btn"><span class="icon">⋯</span> More</button>
+</div>
+
+<!-- RECORD HEADER -->
+<div class="rec-header">
+  <div class="rec-entity">Case</div>
+  <div class="rec-title">INV-2026-0081 — Billing discrepancy query</div>
+  <div class="rec-meta-row">
+    <div class="rec-meta-item">
+      <div class="rec-meta-label">Case Number</div>
+      <div class="rec-meta-val">CASE-2026-04419</div>
+    </div>
+    <div class="rec-meta-item">
+      <div class="rec-meta-label">Customer</div>
+      <div class="rec-meta-val">J. van der Meer</div>
+    </div>
+    <div class="rec-meta-item">
+      <div class="rec-meta-label">Owner</div>
+      <div class="rec-meta-val" id="hdrOwner">M. Jansen</div>
+    </div>
+    <div class="rec-meta-item">
+      <div class="rec-meta-label">Modified</div>
+      <div class="rec-meta-val">Today, 09:42</div>
+    </div>
+    <div class="rec-status">
+      <select id="statusSel" style="font-family:var(--font);font-size:12px;border:1px solid var(--d-border-md);border-radius:2px;padding:3px 8px;background:#fff;color:var(--d-green);font-weight:600;" onchange="updateStatus(this)">
+        <option value="active">● Active</option>
+        <option value="resolved">✓ Resolved</option>
+        <option value="cancelled">✖ Cancelled</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- BUSINESS PROCESS FLOW -->
+<div class="bpf">
+  <span class="bpf-label">PROCESS:</span>
+  <div class="bpf-stage done"><span class="check">✓</span> Identify</div>
+  <div class="bpf-arrow"></div>
+  <div class="bpf-stage done"><span class="check">✓</span> Research</div>
+  <div class="bpf-arrow"></div>
+  <div class="bpf-stage active">Resolve</div>
+  <div class="bpf-arrow"></div>
+  <div class="bpf-stage">Close</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('summary', this)">Summary</button>
+  <button class="tab-btn" onclick="switchTab('details', this)">Details</button>
+  <button class="tab-btn" onclick="switchTab('timeline', this)">Timeline</button>
+</div>
+
+<!-- ══ TAB: SUMMARY ══ -->
+<div id="tab-summary" class="tab-pane active">
+  <div class="form-body">
+
+    <!-- SLA -->
+    <div class="form-sec">
+      <div class="form-sec-hdr" onclick="toggleSec(this)">
+        SLA &amp; Entitlement <span class="chevron">▾</span>
+      </div>
+      <div class="sla-wrap">
+        <div class="sla-ring-wrap">
+          <svg viewBox="0 0 52 52">
+            <circle class="sla-ring-bg" cx="26" cy="26" r="22"/>
+            <circle class="sla-ring-val" id="slaRing" cx="26" cy="26" r="22"
+              stroke="#D97706"
+              stroke-dasharray="138.2"
+              stroke-dashoffset="52.5"/>
+          </svg>
+          <div class="sla-center">
+            <span class="sla-pct warn" id="slaPct" style="color:#D97706">62%</span>
+          </div>
+        </div>
+        <div class="sla-info">
+          <div class="sla-time-big warn" id="slaTime">2:14:33</div>
+          <div class="sla-desc">Time remaining before SLA breach</div>
+          <div class="sla-target">SLA target: 4 hours  ·  Opened today 08:02</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-size:11px;color:var(--d-muted);">Entitlement</div>
+          <div style="font-size:12px;font-weight:600;color:var(--d-blue);">Standard Support</div>
+          <div style="font-size:10px;color:var(--d-muted);margin-top:2px;">Cases remaining: 8/10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE INFO -->
+    <div class="form-sec">
+      <div class="form-sec-hdr" onclick="toggleSec(this)">
+        Case Information <span class="chevron">▾</span>
+      </div>
+      <div class="form-sec-body">
+        <div class="d-grid">
+          <div class="d-field">
+            <label>Case Title</label>
+            <input type="text" value="Billing discrepancy query — INV-2026-0081">
+          </div>
+          <div class="d-field">
+            <label>Status Reason</label>
+            <select>
+              <option>In Progress</option>
+              <option>On Hold</option>
+              <option>Waiting for Details</option>
+              <option>Researching</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Priority</label>
+            <select id="fPriority">
+              <option>2 — Normal</option>
+              <option>1 — High</option>
+              <option>3 — Low</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Case Type</label>
+            <select>
+              <option>Billing query</option>
+              <option>Insurance dispute</option>
+              <option>Payment arrangement</option>
+              <option>DBC question</option>
+              <option>Complaint</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Owner</label>
+            <select id="fOwner" onchange="document.getElementById('hdrOwner').textContent=this.value">
+              <option>M. Jansen</option>
+              <option>S. de Boer</option>
+              <option>R. van Dijk</option>
+              <option>L. Peters</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Origin</label>
+            <select>
+              <option>📞 Phone</option>
+              <option>📧 Email</option>
+              <option>💬 Chat</option>
+              <option>📮 Post</option>
+            </select>
+          </div>
+          <div class="d-field full">
+            <label>Description</label>
+            <textarea>Patient queries discrepancy between insurance statement and invoice #INV-2026-0081. Awaiting response from Zilveren Kruis re: coverage confirmation for F32.0 diagnosis.</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAST INTERACTION -->
+    <div class="form-sec">
+      <div class="form-sec-hdr" onclick="toggleSec(this)">
+        Interaction Details <span class="chevron">▾</span>
+      </div>
+      <div class="form-sec-body">
+        <div class="d-grid">
+          <div class="d-field">
+            <label>Last Interaction</label>
+            <input type="datetime-local" value="2026-05-20T09:42">
+          </div>
+          <div class="d-field">
+            <label>Callback Scheduled</label>
+            <input type="datetime-local" value="2026-05-20T14:30">
+          </div>
+          <div class="d-field">
+            <label>Callback Agent</label>
+            <select>
+              <option>M. Jansen</option>
+              <option>S. de Boer</option>
+              <option>Any available</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Channel</label>
+            <select>
+              <option>Phone</option>
+              <option>Email</option>
+              <option>Chat</option>
+              <option>WhatsApp</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLAGS -->
+    <div class="form-sec">
+      <div class="form-sec-hdr" onclick="toggleSec(this)">
+        Flags &amp; Markers <span class="chevron">▾</span>
+      </div>
+      <div class="flags-grid">
+        <div class="flag-item">
+          <div class="flag-text">Escalation flag
+            <small>Requires senior agent</small>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" class="danger" id="fEscalation">
+            <div class="fluent-track"></div>
+          </label>
+        </div>
+        <div class="flag-item">
+          <div class="flag-text">Complaint / dispute marker
+            <small>Formal complaint lodged</small>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" class="danger" id="fComplaint" checked>
+            <div class="fluent-track"></div>
+          </label>
+        </div>
+        <div class="flag-item">
+          <div class="flag-text">Callback scheduled
+            <small>Agent commitment</small>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" class="success" id="fCBFlag" checked>
+            <div class="fluent-track"></div>
+          </label>
+        </div>
+        <div class="flag-item">
+          <div class="flag-text">Vulnerable customer
+            <small>Additional care required</small>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" class="warn" id="fVuln">
+            <div class="fluent-track"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ TAB: DETAILS ══ -->
+<div id="tab-details" class="tab-pane">
+  <div class="form-body">
+    <div class="form-sec">
+      <div class="form-sec-hdr" onclick="toggleSec(this)">
+        Additional Information <span class="chevron">▾</span>
+      </div>
+      <div class="form-sec-body">
+        <div class="d-grid">
+          <div class="d-field">
+            <label>Contract</label>
+            <input type="text" value="Standard Service Agreement 2026">
+          </div>
+          <div class="d-field">
+            <label>Product</label>
+            <select>
+              <option>Factuurservice — GGZ</option>
+              <option>Factuurservice — Huisarts</option>
+              <option>Debiteurenbeheer</option>
+              <option>Incasso</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>First Response By</label>
+            <input type="datetime-local" value="2026-05-20T12:02">
+          </div>
+          <div class="d-field">
+            <label>Resolve By</label>
+            <input type="datetime-local" value="2026-05-21T08:02">
+          </div>
+          <div class="d-field">
+            <label>Satisfaction</label>
+            <select>
+              <option>— Not yet rated</option>
+              <option>😊 Very Satisfied</option>
+              <option>🙂 Satisfied</option>
+              <option>😐 Neutral</option>
+              <option>😕 Dissatisfied</option>
+              <option>😞 Very Dissatisfied</option>
+            </select>
+          </div>
+          <div class="d-field">
+            <label>Follow-up by (date)</label>
+            <input type="date" value="2026-05-22">
+          </div>
+          <div class="d-field full">
+            <label>Internal notes (not visible to customer)</label>
+            <textarea placeholder="Add internal notes...">Check with Zilveren Kruis team on policy 1234567-00 re: mental health coverage limits for F32.0. Previous similar case resolved 2024 (CASE-2024-01182).</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: TIMELINE ══ -->
+<div id="tab-timeline" class="tab-pane">
+  <div class="form-body">
+    <div class="form-sec">
+      <div class="form-sec-hdr" style="cursor:default;">
+        Activity Timeline
+        <button onclick="" style="font-size:11px;background:var(--d-blue);color:#fff;border:none;
+          border-radius:2px;padding:3px 10px;cursor:pointer;font-family:var(--font);">
+          + Add Activity
+        </button>
+      </div>
+      <div>
+        <div class="tl-item">
+          <div class="tl-icon call">📞</div>
+          <div class="tl-body">
+            <div class="tl-title">Inbound phone call — J. van der Meer</div>
+            <div class="tl-sub">Patient called regarding discrepancy on invoice INV-2026-0081. Escalated to billing team. Duration: 8m 42s.</div>
+          </div>
+          <div class="tl-time">Today, 09:42</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-icon email">📧</div>
+          <div class="tl-body">
+            <div class="tl-title">Email sent — Payment reminder</div>
+            <div class="tl-sub">Automated reminder sent for invoice INV-2026-0081 (€285.00 outstanding).</div>
+          </div>
+          <div class="tl-time">15 May, 10:00</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-icon note">📝</div>
+          <div class="tl-body">
+            <div class="tl-title">Note added — M. Jansen</div>
+            <div class="tl-sub">Awaiting confirmation from Zilveren Kruis on coverage status. Will follow up 20-05.</div>
+          </div>
+          <div class="tl-time">14 May, 14:22</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-icon task">✅</div>
+          <div class="tl-body">
+            <div class="tl-title">Task completed — Verify insurance policy</div>
+            <div class="tl-sub">Policy 1234567-00 verified with Zilveren Kruis portal. Coverage confirmed for primary treatment, query re: supplementary.</div>
+          </div>
+          <div class="tl-time">12 May, 09:15</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-icon call">📞</div>
+          <div class="tl-body">
+            <div class="tl-title">Case created — Inbound phone call</div>
+            <div class="tl-sub">Patient contacted Infomedics regarding invoice. Case opened by R. van Dijk.</div>
+          </div>
+          <div class="tl-time">08 May, 11:03</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── TAB SWITCHING ── */
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ── SECTION COLLAPSE ── */
+  function toggleSec(hdr) {
+    const body = hdr.nextElementSibling;
+    if (!body) return;
+    const isHidden = body.style.display === 'none';
+    body.style.display = isHidden ? '' : 'none';
+    hdr.querySelector('.chevron').textContent = isHidden ? '▾' : '▸';
+  }
+
+  /* ── STATUS COLOR ── */
+  function updateStatus(sel) {
+    const colors = { active: 'var(--d-green)', resolved: '#007A4D', cancelled: 'var(--d-red)' };
+    sel.style.color = colors[sel.value] || 'var(--d-text)';
+  }
+
+  /* ── SLA COUNTDOWN ── */
+  let slaSeconds = 8073;
+  const totalSla = 14400;
+  const slaTimeEl = document.getElementById('slaTime');
+  const slaPctEl  = document.getElementById('slaPct');
+  const slaRingEl = document.getElementById('slaRing');
+  const circumference = 138.2;
+
+  function formatTime(s) {
+    const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
+    return h + ':' + String(m).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+  }
+
+  function updateSLA() {
+    if (slaSeconds <= 0) {
+      slaTimeEl.textContent = 'BREACHED';
+      slaTimeEl.className = 'sla-time-big breach';
+      slaRingEl.style.stroke = 'var(--d-red)';
+      slaRingEl.style.strokeDashoffset = '0';
+      return;
+    }
+    slaSeconds--;
+    const elapsed = totalSla - slaSeconds;
+    const pct = Math.round((elapsed / totalSla) * 100);
+    const offset = circumference - (elapsed / totalSla) * circumference;
+    slaRingEl.style.strokeDashoffset = offset;
+
+    const cls = slaSeconds > 3600 ? 'ok' : slaSeconds > 900 ? 'warn' : 'breach';
+    const colors = { ok: 'var(--d-green)', warn: '#D97706', breach: 'var(--d-red)' };
+    slaRingEl.style.stroke = colors[cls];
+    slaTimeEl.textContent = formatTime(slaSeconds);
+    slaTimeEl.className = 'sla-time-big ' + cls;
+    slaPctEl.textContent = pct + '%';
+    slaPctEl.style.color = colors[cls];
+  }
+
+  setInterval(updateSLA, 1000);
+
+  /* ── FLUENT TOGGLE FIX ── */
+  document.querySelectorAll('.fluent-toggle').forEach(label => {
+    label.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      const cb = label.querySelector('input');
+      cb.checked = !cb.checked;
+    });
+  });
+
+  /* ── PUZZEL WIDGET API ── */
+  const ORIGIN = 'https://agent.puzzel.com';
+  let port = null;
+  window.addEventListener('message', (e) => {
+    if (e.origin !== ORIGIN) return;
+    if (!port && e.ports?.[0]) {
+      port = e.ports[0];
+      port.onmessage = () => {};
+      port.postMessage({ subscribe: 'requestAccepted' });
+    }
+  });
+</script>
+</body>
+</html>

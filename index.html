@@ -298,19 +298,19 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
   </div>
   <span class="app-name">Dynamics 365</span>
   <span class="app-sep">›</span>
-  <span class="app-module">Customer Service</span>
+  <span class="app-module">Klantenservice</span>
   <span class="app-sep">›</span>
-  <span class="app-module" style="color:rgba(255,255,255,0.85)">Cases</span>
+  <span class="app-module" style="color:rgba(255,255,255,0.85)">Dossiers</span>
 </div>
 
 <!-- COMMAND BAR -->
 <div class="cmd-bar">
   <button class="cmd-btn primary"><span class="icon">💾</span> Save</button>
-  <button class="cmd-btn"><span class="icon">✖</span> Save &amp; Close</button>
+  <button class="cmd-btn"><span class="icon">✖</span> Opslaan &amp; Sluiten</button>
   <div class="cmd-sep"></div>
   <button class="cmd-btn"><span class="icon">👤</span> Assign</button>
-  <button class="cmd-btn"><span class="icon">📧</span> Send Email</button>
-  <button class="cmd-btn"><span class="icon">📞</span> Add Phone Call</button>
+  <button class="cmd-btn"><span class="icon">📧</span> E-mail sturen</button>
+  <button class="cmd-btn"><span class="icon">📞</span> Telefoongesprek toevoegen</button>
   <div class="cmd-sep"></div>
   <button class="cmd-btn"><span class="icon">🔔</span> Follow</button>
   <button class="cmd-btn"><span class="icon">⋯</span> More</button>
@@ -319,29 +319,29 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
 <!-- RECORD HEADER -->
 <div class="rec-header">
   <div class="rec-entity">Case</div>
-  <div class="rec-title">INV-2026-0081 — Billing discrepancy query</div>
+  <div class="rec-title">INV-2026-0081 — Vraag over factuurverschil</div>
   <div class="rec-meta-row">
     <div class="rec-meta-item">
-      <div class="rec-meta-label">Case Number</div>
+      <div class="rec-meta-label">Dossiernummer</div>
       <div class="rec-meta-val">CASE-2026-04419</div>
     </div>
     <div class="rec-meta-item">
-      <div class="rec-meta-label">Customer</div>
+      <div class="rec-meta-label">Klant</div>
       <div class="rec-meta-val">J. van der Meer</div>
     </div>
     <div class="rec-meta-item">
-      <div class="rec-meta-label">Owner</div>
+      <div class="rec-meta-label">Eigenaar</div>
       <div class="rec-meta-val" id="hdrOwner">M. Jansen</div>
     </div>
     <div class="rec-meta-item">
-      <div class="rec-meta-label">Modified</div>
-      <div class="rec-meta-val">Today, 09:42</div>
+      <div class="rec-meta-label">Gewijzigd</div>
+      <div class="rec-meta-val">Vandaag, 09:42</div>
     </div>
     <div class="rec-status">
       <select id="statusSel" style="font-family:var(--font);font-size:12px;border:1px solid var(--d-border-md);border-radius:2px;padding:3px 8px;background:#fff;color:var(--d-green);font-weight:600;" onchange="updateStatus(this)">
-        <option value="active">● Active</option>
-        <option value="resolved">✓ Resolved</option>
-        <option value="cancelled">✖ Cancelled</option>
+        <option value="active">● Actief</option>
+        <option value="resolved">✓ Opgelost</option>
+        <option value="cancelled">✖ Geannuleerd</option>
       </select>
     </div>
   </div>
@@ -349,21 +349,21 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
 
 <!-- BUSINESS PROCESS FLOW -->
 <div class="bpf">
-  <span class="bpf-label">PROCESS:</span>
+  <span class="bpf-label">PROCES:</span>
   <div class="bpf-stage done"><span class="check">✓</span> Identify</div>
   <div class="bpf-arrow"></div>
   <div class="bpf-stage done"><span class="check">✓</span> Research</div>
   <div class="bpf-arrow"></div>
-  <div class="bpf-stage active">Resolve</div>
+  <div class="bpf-stage active">Oplossen</div>
   <div class="bpf-arrow"></div>
-  <div class="bpf-stage">Close</div>
+  <div class="bpf-stage">Afsluiten</div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('summary', this)">Summary</button>
+  <button class="tab-btn active" onclick="switchTab('summary', this)">Samenvatting</button>
   <button class="tab-btn" onclick="switchTab('details', this)">Details</button>
-  <button class="tab-btn" onclick="switchTab('timeline', this)">Timeline</button>
+  <button class="tab-btn" onclick="switchTab('timeline', this)">Tijdlijn</button>
 </div>
 
 <!-- ══ TAB: SUMMARY ══ -->
@@ -373,7 +373,7 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
     <!-- SLA -->
     <div class="form-sec">
       <div class="form-sec-hdr" onclick="toggleSec(this)">
-        SLA &amp; Entitlement <span class="chevron">▾</span>
+        SLA &amp; Aanspraak <span class="chevron">▾</span>
       </div>
       <div class="sla-wrap">
         <div class="sla-ring-wrap">
@@ -390,13 +390,13 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
         </div>
         <div class="sla-info">
           <div class="sla-time-big warn" id="slaTime">2:14:33</div>
-          <div class="sla-desc">Time remaining before SLA breach</div>
-          <div class="sla-target">SLA target: 4 hours  ·  Opened today 08:02</div>
+          <div class="sla-desc">Resterende tijd voor SLA-overtreding</div>
+          <div class="sla-target">SLA doel: 4 uur · Geopend vandaag 08:02</div>
         </div>
         <div style="margin-left:auto;text-align:right;">
-          <div style="font-size:11px;color:var(--d-muted);">Entitlement</div>
-          <div style="font-size:12px;font-weight:600;color:var(--d-blue);">Standard Support</div>
-          <div style="font-size:10px;color:var(--d-muted);margin-top:2px;">Cases remaining: 8/10</div>
+          <div style="font-size:11px;color:var(--d-muted);">Aanspraak</div>
+          <div style="font-size:12px;font-weight:600;color:var(--d-blue);">Standaard ondersteuning</div>
+          <div style="font-size:10px;color:var(--d-muted);margin-top:2px;">Dossiers resterend: 8/10</div>
         </div>
       </div>
     </div>
@@ -404,43 +404,43 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
     <!-- CASE INFO -->
     <div class="form-sec">
       <div class="form-sec-hdr" onclick="toggleSec(this)">
-        Case Information <span class="chevron">▾</span>
+        Dossierinformatie <span class="chevron">▾</span>
       </div>
       <div class="form-sec-body">
         <div class="d-grid">
           <div class="d-field">
-            <label>Case Title</label>
+            <label>Dossiertitel</label>
             <input type="text" value="Billing discrepancy query — INV-2026-0081">
           </div>
           <div class="d-field">
-            <label>Status Reason</label>
+            <label>Statusreden</label>
             <select>
-              <option>In Progress</option>
-              <option>On Hold</option>
-              <option>Waiting for Details</option>
-              <option>Researching</option>
+              <option>In behandeling</option>
+              <option>In de wacht</option>
+              <option>Wachten op details</option>
+              <option>Onderzoeken</option>
             </select>
           </div>
           <div class="d-field">
-            <label>Priority</label>
+            <label>Prioriteit</label>
             <select id="fPriority">
-              <option>2 — Normal</option>
-              <option>1 — High</option>
-              <option>3 — Low</option>
+              <option>2 — Normaal</option>
+              <option>1 — Hoog</option>
+              <option>3 — Laag</option>
             </select>
           </div>
           <div class="d-field">
-            <label>Case Type</label>
+            <label>Dossiertype</label>
             <select>
-              <option>Billing query</option>
-              <option>Insurance dispute</option>
-              <option>Payment arrangement</option>
-              <option>DBC question</option>
-              <option>Complaint</option>
+              <option>Factuurvraag</option>
+              <option>Verzekeringsgeschil</option>
+              <option>Betalingsregeling</option>
+              <option>DBC-vraag</option>
+              <option>Klacht</option>
             </select>
           </div>
           <div class="d-field">
-            <label>Owner</label>
+            <label>Eigenaar</label>
             <select id="fOwner" onchange="document.getElementById('hdrOwner').textContent=this.value">
               <option>M. Jansen</option>
               <option>S. de Boer</option>
@@ -449,7 +449,7 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
             </select>
           </div>
           <div class="d-field">
-            <label>Origin</label>
+            <label>Herkomst</label>
             <select>
               <option>📞 Phone</option>
               <option>📧 Email</option>
@@ -458,8 +458,8 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
             </select>
           </div>
           <div class="d-field full">
-            <label>Description</label>
-            <textarea>Patient queries discrepancy between insurance statement and invoice #INV-2026-0081. Awaiting response from Zilveren Kruis re: coverage confirmation for F32.0 diagnosis.</textarea>
+            <label>Omschrijving</label>
+            <textarea>Patiënt vraagt naar afwijking tussen verzekeringsoverzicht en factuur #INV-2026-0081. Wacht op reactie Zilveren Kruis over dekkingsbevestiging voor diagnose F32.0.</textarea>
           </div>
         </div>
       </div>
@@ -468,20 +468,20 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
     <!-- LAST INTERACTION -->
     <div class="form-sec">
       <div class="form-sec-hdr" onclick="toggleSec(this)">
-        Interaction Details <span class="chevron">▾</span>
+        Interactiedetails <span class="chevron">▾</span>
       </div>
       <div class="form-sec-body">
         <div class="d-grid">
           <div class="d-field">
-            <label>Last Interaction</label>
+            <label>Laatste interactie</label>
             <input type="datetime-local" value="2026-05-20T09:42">
           </div>
           <div class="d-field">
-            <label>Callback Scheduled</label>
+            <label>Terugbelafspraak</label>
             <input type="datetime-local" value="2026-05-20T14:30">
           </div>
           <div class="d-field">
-            <label>Callback Agent</label>
+            <label>Terugbelagent</label>
             <select>
               <option>M. Jansen</option>
               <option>S. de Boer</option>
@@ -489,7 +489,7 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
             </select>
           </div>
           <div class="d-field">
-            <label>Channel</label>
+            <label>Kanaal</label>
             <select>
               <option>Phone</option>
               <option>Email</option>
@@ -504,12 +504,12 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
     <!-- FLAGS -->
     <div class="form-sec">
       <div class="form-sec-hdr" onclick="toggleSec(this)">
-        Flags &amp; Markers <span class="chevron">▾</span>
+        Markeringen <span class="chevron">▾</span>
       </div>
       <div class="flags-grid">
         <div class="flag-item">
-          <div class="flag-text">Escalation flag
-            <small>Requires senior agent</small>
+          <div class="flag-text">Escalatiemarkering
+            <small>Vereist senior medewerker</small>
           </div>
           <label class="fluent-toggle">
             <input type="checkbox" class="danger" id="fEscalation">
@@ -517,8 +517,8 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
           </label>
         </div>
         <div class="flag-item">
-          <div class="flag-text">Complaint / dispute marker
-            <small>Formal complaint lodged</small>
+          <div class="flag-text">Klacht / geschil markering
+            <small>Formele klacht ingediend</small>
           </div>
           <label class="fluent-toggle">
             <input type="checkbox" class="danger" id="fComplaint" checked>
@@ -526,8 +526,8 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
           </label>
         </div>
         <div class="flag-item">
-          <div class="flag-text">Callback scheduled
-            <small>Agent commitment</small>
+          <div class="flag-text">Terugbelafspraak ingepland
+            <small>Toezegging medewerker</small>
           </div>
           <label class="fluent-toggle">
             <input type="checkbox" class="success" id="fCBFlag" checked>
@@ -535,8 +535,8 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
           </label>
         </div>
         <div class="flag-item">
-          <div class="flag-text">Vulnerable customer
-            <small>Additional care required</small>
+          <div class="flag-text">Kwetsbare klant
+            <small>Extra aandacht vereist</small>
           </div>
           <label class="fluent-toggle">
             <input type="checkbox" class="warn" id="fVuln">
@@ -554,13 +554,13 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
   <div class="form-body">
     <div class="form-sec">
       <div class="form-sec-hdr" onclick="toggleSec(this)">
-        Additional Information <span class="chevron">▾</span>
+        Aanvullende informatie <span class="chevron">▾</span>
       </div>
       <div class="form-sec-body">
         <div class="d-grid">
           <div class="d-field">
             <label>Contract</label>
-            <input type="text" value="Standard Service Agreement 2026">
+            <input type="text" value="Standaard dienstverleningsovereenkomst 2026">
           </div>
           <div class="d-field">
             <label>Product</label>
@@ -572,31 +572,31 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
             </select>
           </div>
           <div class="d-field">
-            <label>First Response By</label>
+            <label>Eerste reactie voor</label>
             <input type="datetime-local" value="2026-05-20T12:02">
           </div>
           <div class="d-field">
-            <label>Resolve By</label>
+            <label>Oplossen voor</label>
             <input type="datetime-local" value="2026-05-21T08:02">
           </div>
           <div class="d-field">
-            <label>Satisfaction</label>
+            <label>Tevredenheid</label>
             <select>
-              <option>— Not yet rated</option>
-              <option>😊 Very Satisfied</option>
+              <option>— Nog niet beoordeeld</option>
+              <option>😊 Zeer tevreden</option>
               <option>🙂 Satisfied</option>
               <option>😐 Neutral</option>
               <option>😕 Dissatisfied</option>
-              <option>😞 Very Dissatisfied</option>
+              <option>😞 Zeer ontevreden</option>
             </select>
           </div>
           <div class="d-field">
-            <label>Follow-up by (date)</label>
+            <label>Vervolgdatum</label>
             <input type="date" value="2026-05-22">
           </div>
           <div class="d-field full">
-            <label>Internal notes (not visible to customer)</label>
-            <textarea placeholder="Add internal notes...">Check with Zilveren Kruis team on policy 1234567-00 re: mental health coverage limits for F32.0. Previous similar case resolved 2024 (CASE-2024-01182).</textarea>
+            <label>Interne notities (niet zichtbaar voor klant)</label>
+            <textarea placeholder="Interne notities toevoegen...">Controleer bij Zilveren Kruis-team polis 1234567-00 over GGZ-dekkingslimieten voor F32.0. Vergelijkbaar dossier opgelost in 2024 (CASE-2024-01182).</textarea>
           </div>
         </div>
       </div>
@@ -609,52 +609,52 @@ input.success:checked ~ .fluent-track { background: var(--d-green); }
   <div class="form-body">
     <div class="form-sec">
       <div class="form-sec-hdr" style="cursor:default;">
-        Activity Timeline
+        Activiteitentijdlijn
         <button onclick="" style="font-size:11px;background:var(--d-blue);color:#fff;border:none;
           border-radius:2px;padding:3px 10px;cursor:pointer;font-family:var(--font);">
-          + Add Activity
+          + Activiteit toevoegen
         </button>
       </div>
       <div>
         <div class="tl-item">
           <div class="tl-icon call">📞</div>
           <div class="tl-body">
-            <div class="tl-title">Inbound phone call — J. van der Meer</div>
-            <div class="tl-sub">Patient called regarding discrepancy on invoice INV-2026-0081. Escalated to billing team. Duration: 8m 42s.</div>
+            <div class="tl-title">Inkomend telefoongesprek — J. van der Meer</div>
+            <div class="tl-sub">Patiënt belde over afwijking op factuur INV-2026-0081. Doorgezet naar factuurteam. Duur: 8m 42s.</div>
           </div>
-          <div class="tl-time">Today, 09:42</div>
+          <div class="tl-time">Vandaag, 09:42</div>
         </div>
         <div class="tl-item">
           <div class="tl-icon email">📧</div>
           <div class="tl-body">
-            <div class="tl-title">Email sent — Payment reminder</div>
-            <div class="tl-sub">Automated reminder sent for invoice INV-2026-0081 (€285.00 outstanding).</div>
+            <div class="tl-title">E-mail verzonden — Betalingsherinnering</div>
+            <div class="tl-sub">Automatische herinnering verzonden voor factuur INV-2026-0081 (€285.00 outstanding).</div>
           </div>
-          <div class="tl-time">15 May, 10:00</div>
+          <div class="tl-time">15 mei, 10:00</div>
         </div>
         <div class="tl-item">
           <div class="tl-icon note">📝</div>
           <div class="tl-body">
-            <div class="tl-title">Note added — M. Jansen</div>
-            <div class="tl-sub">Awaiting confirmation from Zilveren Kruis on coverage status. Will follow up 20-05.</div>
+            <div class="tl-title">Notitie toegevoegd — M. Jansen</div>
+            <div class="tl-sub">Wacht op bevestiging van Zilveren Kruis over dekkingsstatus. Vervolgactie op 20-05.</div>
           </div>
-          <div class="tl-time">14 May, 14:22</div>
+          <div class="tl-time">14 mei, 14:22</div>
         </div>
         <div class="tl-item">
           <div class="tl-icon task">✅</div>
           <div class="tl-body">
-            <div class="tl-title">Task completed — Verify insurance policy</div>
-            <div class="tl-sub">Policy 1234567-00 verified with Zilveren Kruis portal. Coverage confirmed for primary treatment, query re: supplementary.</div>
+            <div class="tl-title">Taak voltooid — Verzekeringspolis verifiëren</div>
+            <div class="tl-sub">Polis 1234567-00 geverifieerd via Zilveren Kruis portaal. Dekking bevestigd voor primaire behandeling, vraag over aanvullende dekking.</div>
           </div>
-          <div class="tl-time">12 May, 09:15</div>
+          <div class="tl-time">12 mei, 09:15</div>
         </div>
         <div class="tl-item">
           <div class="tl-icon call">📞</div>
           <div class="tl-body">
-            <div class="tl-title">Case created — Inbound phone call</div>
-            <div class="tl-sub">Patient contacted Infomedics regarding invoice. Case opened by R. van Dijk.</div>
+            <div class="tl-title">Dossier aangemaakt — Inkomend telefoongesprek</div>
+            <div class="tl-sub">Patiënt nam contact op met Infomedics over factuur. Dossier geopend door R. van Dijk.</div>
           </div>
-          <div class="tl-time">08 May, 11:03</div>
+          <div class="tl-time">8 mei, 11:03</div>
         </div>
       </div>
     </div>
